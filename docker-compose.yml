@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # 1. Database: PostgreSQL with pgvector
+  db:
+    image: ankane/pgvector:latest
+    container_name: photo_db
+    restart: always
+    environment:
+      POSTGRES_DB: photo_manager
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-init:/docker-entrypoint-initdb.d
+      - pgdata:/var/lib/postgresql/data
+
+  # 2. Cache & Queue: Redis for BullMQ
+  redis:
+    image: redis:7-alpine
+    container_name: photo_redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # 3. AI Engine: Python FastAPI + InsightFace
+  ml-engine:
+    build: ./ml-engine
+    container_name: photo_ml_engine
+    restart: always
+    volumes:
+      - ./storage/photos:/photos:ro
+      - ml_models:/root/.insightface/models
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+
+  # 4. Orchestrator: NestJS API
+  web-api:
+    build: ./web-api
+    container_name: photo_web_api
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./storage/photos:/photos
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/photo_manager
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ML_ENGINE_URL=http://ml-engine:8000
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  pgdata:
+  ml_models:

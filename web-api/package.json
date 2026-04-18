@@ -1,0 +1,43 @@
+{
+  "name": "photo-web-api",
+  "version": "1.0.0",
+  "description": "Photo Management API with AI Analysis",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "nest build",
+    "start:dev": "nest start --watch",
+    "start": "node dist/main",
+    "test": "jest --config jest.config.ts --detectOpenHandles",
+    "test:unit": "jest --config jest.config.ts --detectOpenHandles",
+    "test:integration": "jest --config jest.config.ts --detectOpenHandles",
+    "test:coverage": "jest --config jest.config.ts --detectOpenHandles --coverage",
+    "test:watch": "jest --config jest.config.ts --detectOpenHandles --watch",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.2.0",
+    "@nestjs/core": "^10.2.0",
+    "@nestjs/platform-express": "^10.2.0",
+    "@nestjs/axios": "^3.0.0",
+    "@nestjs/bullmq": "^10.0.0",
+    "@nestjs/config": "^3.1.0",
+    "axios": "^1.6.2",
+    "bullmq": "^5.1.0",
+    "class-validator": "^0.14.0",
+    "class-transformer": "^0.5.1",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.2.0",
+    "@nestjs/testing": "^10.2.0",
+    "@types/node": "^20.9.0",
+    "@types/axios": "^1.5.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.3.0",
+    "supertest": "^6.3.0",
+    "@types/supertest": "^6.3.0"
+  }
+}
